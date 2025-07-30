@@ -1,29 +1,26 @@
-name: Welcome First-Time Issue Contributor
+name: Welcome New Issue Contributor
 
 on:
   issues:
     types: [opened]
 
 jobs:
-  welcome:
+  welcome-first-issue:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
 
     steps:
-      - name: Check if first-time contributor
-        id: first
-        uses: fregante/first-time-contributor-action@v1
-
-      - name: Post welcome comment
-        if: steps.first.outputs.isFirstIssue == 'true'
-        uses: peter-evans/create-or-update-comment@v4
+      - name: Welcome first-time issue contributor
+        uses: plbstl/first-contribution@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            👋 Bonjour @${{ github.actor }} !
+          issue-opened-msg: |
+            👋 Bonjour @{fc-author} !
 
-            Merci d’avoir ouvert ta première issue sur ce dépôt 🎉  
-            Nous apprécions ta contribution et nous allons y jeter un œil très bientôt.  
-            N’hésite pas à nous poser des questions si tu as besoin de clarifications.
+            Merci d’avoir ouvert ta **première issue** 🎉  
+            Nous apprécions ta contribution et nous allons y jeter un œil très bientôt.
+
+            Si tu veux participer au développement du projet, n’hésite pas à regarder le fichier `CONTRIBUTING.md` et notre [Code of Conduct](./CODE_OF_CONDUCT.md).
 
             Bienvenue dans la communauté 💫
