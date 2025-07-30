@@ -1,9 +1,7 @@
-name: Welcome First-Time Contributor
+name: Welcome First-Time Issue Contributor
 
 on:
   issues:
-    types: [opened]
-  pull_request:
     types: [opened]
 
 jobs:
@@ -11,14 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: First interaction check
-        uses: actions/first-interaction@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: ''        # Laisser vide pour ne pas poster de commentaire
-          pr-message: ''
+      - name: Check if first-time contributor
         id: first
+        uses: fregante/first-time-contributor-action@v1
 
-      - name: Echo contributor name if first-time
-        if: steps.first.outputs.first_interaction == 'true'
-        run: echo "🎉 Bienvenue à @${{ github.actor }} pour sa première contribution !"
+      - name: Post welcome comment
+        if: steps.first.outputs.isFirstIssue == 'true'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            👋 Bonjour @${{ github.actor }} !
+
+            Merci d’avoir ouvert ta première issue sur ce dépôt 🎉  
+            Nous apprécions ta contribution et nous allons y jeter un œil très bientôt.  
+            N’hésite pas à nous poser des questions si tu as besoin de clarifications.
+
+            Bienvenue dans la communauté 💫
