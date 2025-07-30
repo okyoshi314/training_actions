@@ -1,11 +1,11 @@
-name: Welcome New Issue Contributor
+name: Welcome and Auto-Comment on Issue
 
 on:
   issues:
     types: [opened]
 
 jobs:
-  welcome-first-issue:
+  on-issue-open:
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -24,3 +24,13 @@ jobs:
             Si tu veux participer au développement du projet, n’hésite pas à regarder le fichier `CONTRIBUTING.md` et notre [Code of Conduct](./CODE_OF_CONDUCT.md).
 
             Bienvenue dans la communauté 💫
+
+      - name: Comment on every new issue
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ✅ Merci pour la création de cette issue !  
+            Nous avons bien reçu votre message et allons travailler dessus dès que possible.  
+            Un membre de l’équipe reviendra vers vous sous peu.
